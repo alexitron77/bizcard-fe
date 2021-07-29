@@ -22,23 +22,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 function getSteps() {
   return ['Create your card', 'Upload your card'];
 }
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <BasicTextFields></BasicTextFields>;
-    case 1:
-      return <DropzoneDialogExample></DropzoneDialogExample>;
-    default:
-      return 'Unknown step';
-  }
-}
-
-export default function HorizontalLinearStepper() {
+export default function HorizontalLinearStepper(props) {
   const classes = useStyles();
+  const [uploadFile, setUploadFile] = React.useState("")
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
@@ -50,6 +41,23 @@ export default function HorizontalLinearStepper() {
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
+
+
+function uploadedFile(file) {
+  console.log("File is queuing")
+  setUploadFile(file)
+}
+
+function getStepContent(step) {
+  switch (step) {
+    case 0:
+      return <BasicTextFields></BasicTextFields>;
+    case 1:
+      return <DropzoneDialogExample getFile={uploadedFile}></DropzoneDialogExample>;
+    default:
+      return 'Unknown step';
+  }
+}
 
   const handleNext = () => {
     console.log(activeStep)
@@ -67,7 +75,9 @@ export default function HorizontalLinearStepper() {
   };
 
   const handleFinish = () => {
-    sendForm()
+    console.log("Stepper is over")
+    sendForm("", uploadFile)
+    
   }
 
   const handleBack = () => {

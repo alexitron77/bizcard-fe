@@ -19,14 +19,11 @@ export default class DropzoneDialogExample extends Component {
 
     handleSave(files) {
         //Saving files to state for further use and closing Modal.
-        let buff = new Buffer(files);
-        let base64data = buff.toString('base64');
-        console.log(base64data)
         this.setState({
             files: files,
             open: false
         });
-        localStorage.setItem("file", base64data)
+        this.props.getFile(files)
     }
 
     handleOpen() {
@@ -52,4 +49,5 @@ export default class DropzoneDialogExample extends Component {
             </div>
         );
     }
+
 }
